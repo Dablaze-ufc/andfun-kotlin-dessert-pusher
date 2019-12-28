@@ -17,6 +17,9 @@
 package com.example.android.dessertpusher
 
 import android.os.Handler
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import timber.log.Timber
 
 /**
@@ -34,9 +37,12 @@ import timber.log.Timber
  * https://developer.android.com/guide/components/processes-and-threads
  *
  */
-class DessertTimer {
+class DessertTimer(lifecycle: Lifecycle) : LifecycleObserver {
 
     // The number of seconds counted since the timer started
+    init {
+        lifecycle.addObserver(this)
+    }
     var secondsCount = 0
 
     /**
@@ -45,6 +51,10 @@ class DessertTimer {
      */
     private var handler = Handler()
     private lateinit var runnable: Runnable
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun dummyMethod() {
+        Timber.i("I was called")
+    }
 
 
     fun startTimer() {
